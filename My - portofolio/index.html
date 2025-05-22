@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Add this in the <head> section -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<style>
+.lightbox {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: all 0.3s ease;
+    justify-content: center;
+    align-items: center;
+}
+
+.lightbox-content {
+    max-width: 90%;
+    max-height: 90vh;
+    animation: zoomIn 0.6s ease;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes zoomIn {
+    0% {
+        transform: scale(0.3);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.close-lightbox {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    z-index: 1000;
+}
+
+.close-lightbox:hover {
+    color: var(--accent-color);
+    transform: scale(1.1);
+}
+
+.project-box img {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.project-box img:hover {
+    transform: scale(1.03);
+    box-shadow: 0 5px 15px rgba(0, 136, 204, 0.3);
+}
+
+/* Enhanced Skills Section Styles */
+.skills-content {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 10px 30px rgba(0, 136, 204, 0.1);
+}
+
+.skill-item {
+    margin-bottom: 35px;
+    padding: 15px 25px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 136, 204, 0.1);
+    transform: translateX(-50px);
+    opacity: 0;
+    animation: slideRight 1s ease forwards;
+    animation-delay: calc(.2s * var(--i));
+    transition: all 0.3s ease;
+}
+
+.skill-item:hover {
+    transform: translateX(10px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 136, 204, 0.2);
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.skill-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.skill-progress {
+    width: calc(100% - 60px);
+    height: 12px;
+    background: var(--secondary-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    float: left;
+    margin-right: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, 
+        var(--accent-color) 0%,
+        #0077b3 50%,
+        var(--accent-color) 100%
+    );
+    background-size: 200% 100%;
+    border-radius: 10px;
+    animation: fillBar 1.5s ease forwards,
+               shine 3s linear infinite;
+    transform-origin: left;
+    transform: scaleX(0);
+}
+
+.skill-percent {
+    float: right;
+    font-weight: 600;
+    color: var(--accent-color);
+    font-size: 16px;
+    animation: fadeIn 0.5s ease forwards;
+    animation-delay: calc(.5s * var(--i));
+}
+
+@keyframes fillBar {
+    from {
+        transform: scaleX(0);
+    }
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes shine {
+    0% {
+        background-position: 200% 50%;
+    }
+    100% {
+        background-position: -200% 50%;
+    }
+}
+
+/* Intersection Observer for animation triggers */
+.skill-item.animate {
+    animation: slideRight 1s ease forwards;
+}
+
+/* Social links styling */
+.social-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px; /* Increased gap between icons */
+    margin: 50px auto; /* Added margin for better spacing */
+    max-width: 600px; /* Control the width of the container */
+    padding: 20px;
+}
+
+.social-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    opacity: 0;
+    animation: slideTop 1s ease forwards;
+    animation-delay: calc(0.2s * var(--i));
+}
+
+.social-item i {
+    font-size: 40px; /* Increased icon size */
+    padding: 25px; /* Increased padding */
+    width: 90px; /* Set fixed width */
+    height: 90px; /* Set fixed height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #ffffff, #f0f0f0);
+    box-shadow: 
+        5px 5px 15px rgba(0, 0, 0, 0.1),
+        -5px -5px 15px rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+.social-item span {
+    font-size: 18px; /* Increased font size */
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.social-item:hover i {
+    transform: translateY(-8px);
+    box-shadow: 
+        8px 8px 20px rgba(0, 0, 0, 0.15),
+        -8px -8px 20px rgba(255, 255, 255, 0.9);
+    color: #fff;
+}
+
+/* Specific colors for each social media icon */
+.fa-whatsapp:hover {
+    background: #25D366;
+}
+
+.fa-instagram:hover {
+    background: #E4405F;
+}
+
+.fa-twitter:hover {
+    background: #1DA1F2;
+}
+
+/* Center the entire contact section */
+.contact-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px; /* Minimum height for better centering */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .skills-content {
+        width: 95%;
+        padding: 15px;
+    }
+    
+    .skill-item {
+        padding: 12px 20px;
+    }
+    
+    .skill-name {
+        font-size: 16px;
+    }
+    
+    .social-links {
+        gap: 40px;
+        padding: 15px;
+    }
+    
+    .social-item i {
+        font-size: 32px;
+        padding: 20px;
+        width: 75px;
+        height: 75px;
+    }
+    
+    .social-item span {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .social-links {
+        gap: 25px;
+    }
+    
+    .social-item i {
+        font-size: 28px;
+        padding: 18px;
+        width: 65px;
+        height: 65px;
+    }   
+}
+</style>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <a href="#" class="logo">Portfolio</a>
+        
+        <div class="menu-icon">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+
+        <nav class="navbar">
+            <a href="#home" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#skills">Skills</a>
+            <a href="#projects">Projects</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+    
+    <!-- Home Section -->
+    <section class="home" id="home">
+        <div class="home-content">
+            <h1>Hallo, Saya Kinkin Maharani</h1>
+            <p>Seorang siswi SMKN 1 CIOMAS</p>
+            
+            <div class="btn-box">
+                <a href="#projects">My Projects</a>
+                <a href="#contact">Let's Talk</a>
+            </div>
+        </div>
+
+        <div class="home-image">
+            <img src="image/poto1.jpg" alt="Profile Picture">
+        </div>
+    </section>
+    
+    <!-- About Section -->
+<section class="about" id="about">
+    <h2 class="heading">About <span>Me</span></h2>
+    
+    <div class="about-content">
+        <div class="about-img">
+            <img src="image/poto.jpg" alt="Profile Picture">
+        </div>
+        
+        <div class="about-text">
+            <p>Saya adalah siswi SMKN 1 Ciomas, jurusan Pengembangan Perangkat Lunak dan Gim (PPLG). Sejak awal masuk jurusan ini, saya tertarik pada dunia teknologi, terutama di bidang desain dan pengembangan aplikasi. Saya memiliki ketertarikan yang kuat pada desain digital—mulai dari UI/UX hingga ilustrasi visual—dan cukup terampil dalam menciptakan karya yang menarik secara estetika.</p>
+            <p>Meskipun kemampuan ngoding saya masih dalam tahap belajar, saya sudah mengenal dasar-dasar pemrograman dan terus mengembangkan skill tersebut agar bisa membangun aplikasi atau gim secara mandiri di masa depan. Bagi saya, gabungan antara kreativitas desain dan logika pemrograman adalah kekuatan utama yang ingin saya terus kembangkan.</p>
+            
+            <div class="cv-download">
+                <a href="file/cv.pdf" class="download-btn" download>Download CV</a>
+                <a href="file/cv.pdf" class="view-btn" target="_blank">View CV</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Skills Section -->
+    <section class="skills" id="skills">
+        <h2 class="heading">My <span>Skills</span></h2>
+        
+        <div class="skills-content">
+            <div class="skill-item">
+                <div class="skill-name">Desain Grafis</div>
+                <div class="skill-progress">
+                    <div class="progress-bar" style="width: 75%"></div>
+                </div>
+                <div class="skill-percent">75%</div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-name">Digital Marketing</div>
+                <div class="skill-progress">
+                    <div class="progress-bar" style="width: 80%"></div>
+                </div>
+                <div class="skill-percent">80%</div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-name">Mobile App</div>
+                <div class="skill-progress">
+                    <div class="progress-bar" style="width: 40%"></div>
+                </div>
+                <div class="skill-percent">40%</div>
+            </div>
+
+            
+            <div class="skill-item">
+                <div class="skill-name">Web Development</div>
+                <div class="skill-progress">
+                    <div class="progress-bar" style="width: 35%"></div>
+                </div>
+                <div class="skill-percent">50%</div>
+            </div>
+            
+            <div class="skill-item">
+                <div class="skill-name">UI/UX Design</div>
+                <div class="skill-progress">
+                    <div class="progress-bar" style="width: 75%"></div>
+                </div>
+                <div class="skill-percent">75%</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Projects Section -->
+    <section class="projects" id="projects">
+        <h2 class="heading">My <span>Projects</span></h2>
+        
+        <div class="projects-content">
+            <div class="project-box">
+                <img src="image/sertifikat.jpg" alt="Project 1">
+            </div>
+            <div class="project-box">
+                <img src="image/sertifikat1.jpg" alt="Project 2">
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="contact-content">
+            <div class="social-links">
+                <a href="https://wa.me/+6289601035995" class="social-item" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                
+                <a href="https://www.instagram.com/prettypnsy__" class="social-item" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                
+                <a href="https://www.tiktok.com/@yh.lv" class="social-item" target="_blank">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Your Name | All Rights Reserved</p>
+    </footer>
+
+    <!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <span class="close-lightbox">&times;</span>
+    <img class="lightbox-content" id="lightbox-img">
+</div>
+
+<script>
+    // Lightbox functionality
+    const projectImages = document.querySelectorAll('.project-box img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const closeLightbox = document.querySelector('.close-lightbox');
+
+    // Open lightbox
+    projectImages.forEach(image => {
+        image.addEventListener('click', () => {
+            lightbox.style.display = 'flex';
+            lightboxImg.src = image.src;
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        });
+    });
+
+    // Close lightbox
+    const closeLightboxFunction = () => {
+        lightbox.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+    };
+
+    closeLightbox.addEventListener('click', closeLightboxFunction);
+
+    // Close on outside click
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) {
+            closeLightboxFunction();
+        }
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.style.display === 'flex') {
+            closeLightboxFunction();
+        }
+    });
+</script>
+<script>
+    // Mobile menu functionality
+    const header = document.querySelector('.header');
+    const navbar = document.querySelector('.navbar');
+
+    document.querySelector('.menu-icon')?.addEventListener('click', () => {
+        navbar.classList.toggle('active');
+    });
+
+    // Close menu when clicking a link
+    document.querySelectorAll('.navbar a').forEach(link => {
+        link.addEventListener('click', () => {
+            navbar.classList.remove('active');
+        });
+    });
+
+    // Hide menu on scroll
+    let lastScrollY = window.scrollY;
+    window.addEventListener('scroll', () => {
+        if (lastScrollY < window.scrollY) {
+            navbar.classList.remove('active');
+        }
+        lastScrollY = window.scrollY;
+    });
+</script>
+</body>
+</html>
